@@ -10,7 +10,7 @@
 
 #define PLUGIN_NAME			"Deathrun"
 #define PLUGIN_DESCRIPTION	"Deathrun manager for CS:S and CS:GO"
-#define PLUGIN_VERSION		"2.0.dev4"
+#define PLUGIN_VERSION		"2.0.dev5"
 #define PLUGIN_AUTHOR		"selax"
 #define PLUGIN_URL			"https://github.com/selax/deathrun"
 
@@ -33,6 +33,7 @@ Handle	config_Scores;
 Handle	config_RandomPlayers;
 Handle	config_RandomRate;
 Handle	config_AutoRespawn;
+Handle	config_AutoRespawnHint;
 Handle	config_AutoBan;
 
 bool	OldChoosens	[ MAXPLAYERS + 1 ];
@@ -45,7 +46,7 @@ int		score		[ MAXPLAYERS + 1 ];
 
 bool	respawn_Active	= false;
 int		respawn_Seconds	= 0;
-Handle	respawn_HintTimerHandle;
+Handle	respawn_TimerHandle;
 
 public void OnPluginStart()
 {
@@ -58,6 +59,7 @@ public void OnPluginStart()
 	config_RandomPlayers	= CreateConVar( "dr_random",			"2",	"Type of player randomizing, or disable this feature",	FCVAR_NONE, true, 0.0, true, 3.0	);
 	config_RandomRate		= CreateConVar( "dr_random_rate",		"0",	"How many players for one choosen player",				FCVAR_NONE, true, 0.0, true, 64.0	);
 	config_AutoRespawn		= CreateConVar( "dr_autorespawn",		"15",	"How many seconds after round start players respawn?",	FCVAR_NONE, true, 0.0, true, 99.0	);
+	config_AutoRespawnHint	= CreateConVar( "dr_autorespawn_hint",	"1",	"Display autorespawn timer hint?",							FCVAR_NONE, true, 0.0, true, 1.0	);
 	config_AutoBan			= CreateConVar( "dr_autoban",			"60",	"How many minutes ban for choosen disconnect?",			FCVAR_NONE, true, 0.0, true, 99.0	);
 	
 	LoadTranslations(						"plugin.deathrun"	);
@@ -178,25 +180,28 @@ public Action event_RoundStart( Handle event, const char[] name, bool dontBroadc
 	
 	if ( GetConVarInt( config_AutoRespawn ) != 0 )
 	{
-		respawn_Active			= true;
-		respawn_Seconds			= GetConVarInt	( config_AutoRespawn		);
-		respawn_HintTimerHandle	= CreateTimer	( 1.0, respawn_HintTimer	);
+		respawn_Active		= true;
+		respawn_Seconds		= GetConVarInt	( config_AutoRespawn );
+		respawn_TimerHandle	= CreateTimer	( 1.0, respawn_Timer );
 	}
 	
 	return Plugin_Continue;
 }
 
-public Action respawn_HintTimer( Handle timer )
+public Action respawn_Timer( Handle timer )
 {
 	if ( ( GetConVarInt( config_AutoRespawn ) != 0 ) && respawn_Active )
 	{
 		respawn_Seconds--;
 		
-		CGOPrintHintTextToAll( "%t", "AUTORESPAWN_TIME_LEFT", respawn_Seconds );
-		
-		if ( respawn_HintTimerHandle != INVALID_HANDLE )
+		if ( GetConVarBool( config_AutoRespawnHint ) )
 		{
-			KillTimer( respawn_HintTimerHandle );
+			CGOPrintHintTextToAll( "%t", "AUTORESPAWN_TIME_LEFT", respawn_Seconds );
+		}
+		
+		if ( respawn_TimerHandle != INVALID_HANDLE )
+		{
+			KillTimer( respawn_TimerHandle );
 		}
 		
 		if ( respawn_Seconds <= 0 )
@@ -204,7 +209,7 @@ public Action respawn_HintTimer( Handle timer )
 			respawn_Active = false;
 		}
 		
-		respawn_HintTimerHandle = CreateTimer( 1.0, respawn_HintTimer );
+		respawn_TimerHandle = CreateTimer( 1.0, respawn_Timer );
 	}
 }
 
