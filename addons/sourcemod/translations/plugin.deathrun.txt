@@ -23,7 +23,13 @@
 	"NEW_CHOOSEN"
 	{
 		"#format"	"{1:s}"
-		"en"		"Player {LIGHTRED}{1} {LIGHTGREEN} is a new choosen!"
+		"en"		"Player {LIGHTRED}{1} {LIGHTGREEN}is a new choosen!"
+	}
+	
+	"REPLACE_CHOOSEN"
+	{
+		"#format"	"{1:s}"
+		"en"		"Player {LIGHTRED}{1} {LIGHTGREEN}replaced choosen!"
 	}
 	
 	"NEW_CHOOSENS"

@@ -100,6 +100,34 @@ public Action event_PlayerConnect( Handle event, const char[] name, bool dontBro
 	return Plugin_Handled;
 }
 
+// if choosen disconnect - move another player to choosens team
+void CheckChoosensTeam( )
+{
+	int NewTeam = GetConVarInt( config_RandomPlayers );
+	
+	if ( GetTeamClientCount( NewTeam ) <= 1 )
+	{
+		int ChoosenPlayer = RandomPlayers();
+		
+		if ( ChoosenPlayer == -1 )
+		{
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			return;
+		}
+		
+		NewChoosens[ ChoosenPlayer ] = true;
+		
+		char name[ 16 ];
+		GetClientName( ChoosenPlayer, name, sizeof ( name ) );
+		
+		CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "REPLACE_CHOOSEN", name );
+		
+		CS_SwitchTeam( ChoosenPlayer, NewTeam );
+		
+		CS_RespawnPlayer( ChoosenPlayer );
+	}
+}
+
 public Action event_PlayerDisconnect( Handle event, const char[] name, bool dontBroadcast )
 {
 	if ( !GetConVarBool( config_Enabled ) )
@@ -109,43 +137,33 @@ public Action event_PlayerDisconnect( Handle event, const char[] name, bool dont
 	
 	int client = GetClientOfUserId( GetEventInt( event, "userid" ) );
 	
-	if ( GetConVarInt( config_AutoBan ) != 0 )
+	if ( ( GetClientTeam( client ) == GetConVarInt( config_RandomPlayers ) ) && ( GetConVarInt( config_RandomPlayers ) > 1 ) )
 	{
-		if ( client > 0 )
+		if ( GetConVarInt( config_AutoBan ) != 0 )
 		{
-			return Plugin_Handled;
-		}
-		
-		if ( !IsClientInGame( client ) )
-		{
-			return Plugin_Handled;
-		}
-		
-		if ( GetClientTeam( client ) != GetConVarInt( config_RandomPlayers ) )
-		{
-			return Plugin_Handled;
-		}
-		
-		if ( GetPlayersCount() >= GetConVarInt( config_MinPlayers ) )
-		{
-			char reason[ 64 ], cname[ 64 ], steamid[ 64 ];
-			
-			GetEventString( event, "networkid", steamid, sizeof( steamid ) );
-			GetEventString( event, "reason", reason, sizeof ( reason ) );
-			
-			if ( StrEqual( reason, "Disconnect", false ) )
+			if ( IsClientInGame( client ) && ( GetPlayersCount() >= GetConVarInt( config_MinPlayers ) ) )
 			{
+				char reason[ 64 ], cname[ 64 ], steamid[ 64 ];
 				
-				if( !GetClientName( client, cname, sizeof( cname ) ) )
+				GetEventString( event, "networkid", steamid, sizeof( steamid ) );
+				GetEventString( event, "reason", reason, sizeof ( reason ) );
+				
+				if ( StrEqual( reason, "Disconnect", false ) )
 				{
-					Format( cname, sizeof( cname ), "Unconnected" );
+					
+					if( !GetClientName( client, cname, sizeof( cname ) ) )
+					{
+						Format( cname, sizeof( cname ), "Unconnected" );
+					}
+					
+					BanClient( client, GetConVarInt( config_AutoBan ), BANFLAG_AUTHID, "Выход из команды террористов", "Выход из команды террористов" );
+					
+					CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN_DISCONNECTED", cname, GetConVarInt( config_AutoBan ) );
 				}
-				
-				BanClient( client, GetConVarInt( config_AutoBan ), BANFLAG_AUTHID, "Выход из команды террористов", "Выход из команды террористов" );
-				
-				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN_DISCONNECTED", cname, GetConVarInt( config_AutoBan ) );
 			}
 		}
+		
+		CheckChoosensTeam( );
 	}
 	
 	return Plugin_Handled;
@@ -409,7 +427,6 @@ public Action event_RoundEnd( Handle event, const char[] name, bool dontBroadcas
 		}
 	}
 	
-	
 	if ( GetConVarBool( config_Scores ) )
 	{
 		int reason = GetEventInt( event, "reason" );
@@ -445,13 +462,7 @@ public Action ChoosePlayers( Handle timer )
 	}
 	
 	int NewTeam = GetConVarInt( config_RandomPlayers );
-	int OldTeam = CS_TEAM_CT;
-	
-	
-	if ( NewTeam ==	CS_TEAM_CT )
-	{
-		OldTeam	=	CS_TEAM_CT;
-	}
+	int OldTeam = GetPlayersTeam( );
 	
 	for ( int i = 1; i <= MaxClients; i++ )
 	{
@@ -474,7 +485,7 @@ public Action ChoosePlayers( Handle timer )
 	
 	if ( GetConVarInt( config_RandomRate ) != 0 )
 	{
-		ChoosensNum = view_as<int>(GetTeamClientCount( GetPlayersTeam( ) ) / GetConVarInt( config_RandomRate ));
+		ChoosensNum = view_as<int>( GetTeamClientCount( OldTeam ) / GetConVarInt( config_RandomRate ) );
 	}
 	
 	char buffer[ 256 ];
@@ -512,6 +523,11 @@ public Action ChoosePlayers( Handle timer )
 		}
 		
 		CS_SwitchTeam( ChoosenPlayer, NewTeam );
+		
+		if ( IsPlayerAlive( ChoosenPlayer ) )
+		{
+			CS_RespawnPlayer( ChoosenPlayer );
+		}
 	}
 	
 	if ( ChoosensNum != 1 )

@@ -25,6 +25,12 @@
 		"ru"		"Игрок {LIGHTRED}{1} {LIGHTGREEN}был избран!"
 	}
 	
+	"REPLACE_CHOOSEN"
+	{
+		"#format"	"{1:s}"
+		"en"		"Игрок {LIGHTRED}{1} {LIGHTGREEN}заменил избранного!"
+	}
+	
 	"NEW_CHOOSENS"
 	{
 		"ru"		"Избранные игроки: "
