@@ -624,7 +624,7 @@ public Action ChoosePlayers( Handle timer )
 			}
 			else
 			{
-				Format( buffer, sizeof( buffer ), "%s{LIGHTGREEN}, {RED}%s",	 buffer, name );
+				Format( buffer, sizeof( buffer ), "%s{LIGHTGREEN}, {RED}%s", buffer, name );
 			}
 		}
 		
