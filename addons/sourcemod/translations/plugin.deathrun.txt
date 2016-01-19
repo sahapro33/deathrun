@@ -23,13 +23,13 @@
 	"NEW_CHOOSEN"
 	{
 		"#format"	"{1:s}"
-		"en"		"Player {LIGHTRED}{1} {LIGHTGREEN}is a new choosen!"
+		"en"		"Player {RED}{1} {LIGHTGREEN}is a new choosen!"
 	}
 	
 	"REPLACE_CHOOSEN"
 	{
 		"#format"	"{1:s}"
-		"en"		"Player {LIGHTRED}{1} {LIGHTGREEN}replaced choosen!"
+		"en"		"Player {RED}{1} {LIGHTGREEN}replaced choosen!"
 	}
 	
 	"NEW_CHOOSENS"
@@ -52,10 +52,15 @@
 		"en"		"You can't suicide!"
 	}
 	
+	"AUTORESPAWN"
+	{
+		"en"		"Autorespawn"
+	}
+	
 	"AUTORESPAWN_TIME_LEFT"
 	{
 		"#format"	"{1:i}"
-		"ru"		" {{#00FFFF==Autorespawn}}\n {1} second(s) left..."
+		"en"		"{1} second(s) left..."
 	}
 	
 	"CHOOSEN_DISCONNECTED"

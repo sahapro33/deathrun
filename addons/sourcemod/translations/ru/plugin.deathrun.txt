@@ -22,13 +22,13 @@
 	
 	"NEW_CHOOSEN"
 	{
-		"ru"		"Игрок {LIGHTRED}{1} {LIGHTGREEN}был избран!"
+		"ru"		"Игрок {RED}{1} {LIGHTGREEN}был избран!"
 	}
 	
 	"REPLACE_CHOOSEN"
 	{
 		"#format"	"{1:s}"
-		"en"		"Игрок {LIGHTRED}{1} {LIGHTGREEN}заменил избранного!"
+		"en"		"Игрок {RED}{1} {LIGHTGREEN}заменил избранного!"
 	}
 	
 	"NEW_CHOOSENS"
@@ -51,9 +51,14 @@
 		"ru"		"Самоубийство запрещено!"
 	}
 	
+	"AUTORESPAWN"
+	{
+		"ru"		"Автоматическое воскрешение"
+	}
+	
 	"AUTORESPAWN_TIME_LEFT"
 	{
-		"ru"		"  {{#00FFFF==Автоматическое воскрешение}}\n  Осталось {1} секунд..."
+		"ru"		"Осталось {1} секунд..."
 	}
 	
 	"CHOOSEN_DISCONNECTED"

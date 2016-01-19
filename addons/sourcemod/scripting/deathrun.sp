@@ -4,13 +4,14 @@
 #include <sdktools>
 #include <cstrike>
 #include <csgo_colors>
+#include <morecolors>
 #include <sdkhooks>
 
 #pragma newdecls required
 
 #define PLUGIN_NAME			"Deathrun"
 #define PLUGIN_DESCRIPTION	"Deathrun manager for CS:S and CS:GO"
-#define PLUGIN_VERSION		"2.0.dev5"
+#define PLUGIN_VERSION		"2.0.dev6"
 #define PLUGIN_AUTHOR		"selax"
 #define PLUGIN_URL			"https://github.com/selax/deathrun"
 
@@ -25,6 +26,8 @@ public Plugin myinfo =
 	version		= PLUGIN_VERSION,
 	url			= PLUGIN_URL
 };
+
+EngineVersion GameVersion;
 
 Handle	config_Enabled;
 Handle	config_BlockUsePickup;
@@ -50,6 +53,8 @@ Handle	respawn_TimerHandle;
 
 public void OnPluginStart()
 {
+	GameVersion = GetEngineVersion( );
+	
 	CreateConVar( "dr_version", PLUGIN_VERSION, PLUGIN_URL, FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY | FCVAR_DONTRECORD );
 	
 	config_Enabled			= CreateConVar( "dr_enable",			"1",	"Enable the deathrun manager plugin?",					FCVAR_NONE, true, 0.0, true, 1.0	);
@@ -113,7 +118,15 @@ void CheckChoosensTeam( )
 		
 		if ( ChoosenPlayer == -1 )
 		{
-			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			}
+			
 			return;
 		}
 		
@@ -122,7 +135,14 @@ void CheckChoosensTeam( )
 		char name[ 16 ];
 		GetClientName( ChoosenPlayer, name, sizeof ( name ) );
 		
-		CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "REPLACE_CHOOSEN", name );
+		if ( GameVersion == Engine_CSGO )
+		{
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "REPLACE_CHOOSEN", name );
+		}
+		else if ( GameVersion == Engine_CSS )
+		{
+			CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "REPLACE_CHOOSEN", name );
+		}
 		
 		CS_SwitchTeam( ChoosenPlayer, NewTeam );
 		
@@ -160,7 +180,14 @@ public Action event_PlayerDisconnect( Handle event, const char[] name, bool dont
 					
 					BanClient( client, GetConVarInt( config_AutoBan ), BANFLAG_AUTHID, "Выход из команды террористов", "Выход из команды террористов" );
 					
-					CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN_DISCONNECTED", cname, GetConVarInt( config_AutoBan ) );
+					if ( GameVersion == Engine_CSGO )
+					{
+						CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN_DISCONNECTED", cname, GetConVarInt( config_AutoBan ) );
+					}
+					else if ( GameVersion == Engine_CSS )
+					{
+						CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN_DISCONNECTED", cname, GetConVarInt( config_AutoBan ) );
+					}
 				}
 			}
 		}
@@ -196,7 +223,14 @@ public Action respawn_Timer( Handle timer )
 		
 		if ( GetConVarBool( config_AutoRespawnHint ) )
 		{
-			CGOPrintHintTextToAll( "%t", "AUTORESPAWN_TIME_LEFT", respawn_Seconds );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintHintTextToAll( "  {{#00FFFF=%t}}\n  %t", "AUTORESPAWN", "AUTORESPAWN_TIME_LEFT", respawn_Seconds );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				PrintHintTextToAll( "%t: %t", "AUTORESPAWN", "AUTORESPAWN_TIME_LEFT",	respawn_Seconds );
+			}
 		}
 		
 		if ( respawn_TimerHandle != INVALID_HANDLE )
@@ -227,7 +261,15 @@ public Action command_Spectate( int client, int args )
 	
 	if ( ( GetClientTeam( client ) == GetConVarInt( config_RandomPlayers ) ) && ( GetConVarInt( config_RandomPlayers ) != 1 ) )
 	{
-		CGOPrintToChat( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+		if ( GameVersion == Engine_CSGO )
+		{
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+		}
+		else if ( GameVersion == Engine_CSS )
+		{
+			CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+		}
+		
 		return Plugin_Handled;
 	}
 	
@@ -243,7 +285,15 @@ public Action command_Suicide( int client, int args )
 	
 	if ( ( GetClientTeam( client ) == GetConVarInt( config_RandomPlayers ) ) && ( GetConVarInt( config_RandomPlayers ) != 1 ) )
 	{
-		CGOPrintToChat( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSENS_CANT_SUICIDE" );
+		if ( GameVersion == Engine_CSGO )
+		{
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSENS_CANT_SUICIDE" );
+		}
+		else if ( GameVersion == Engine_CSS )
+		{
+			CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSENS_CANT_SUICIDE" );
+		}
+		
 		return Plugin_Handled;
 	}
 	
@@ -293,7 +343,14 @@ public Action command_JoinTeam( int client, int args )
 		}
 		else if ( CurrentTeam != PlayersTeam )
 		{
-			CGOPrintToChat( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_CHOOSENS_TEAM" );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_CHOOSENS_TEAM" );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_CHOOSENS_TEAM" );
+			}
 			
 			if ( CurrentTeam != ChoosensTeam )
 			{
@@ -310,7 +367,14 @@ public Action command_JoinTeam( int client, int args )
 		}
 		else
 		{
-			CGOPrintToChat( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+			}
 		}
 	}
 	else if ( ( SelectedTeam == CS_TEAM_SPECTATOR ) || ( SelectedTeam == CS_TEAM_NONE ) )
@@ -321,7 +385,14 @@ public Action command_JoinTeam( int client, int args )
 		}
 		else
 		{
-			CGOPrintToChat( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
+			}
 		}
 	}
 	
@@ -412,11 +483,26 @@ public Action event_RoundEnd( Handle event, const char[] name, bool dontBroadcas
 		
 		if ( GetConVarInt( config_RandomPlayers ) == 1 )
 		{
-			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "MIXING_PLAYERS" );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "MIXING_PLAYERS" );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "MIXING_PLAYERS" );
+			}
 		}
 		else
 		{
-			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
+			}
+			
 			CreateTimer( 1.0, ChoosePlayers );
 		}
 		
@@ -501,7 +587,15 @@ public Action ChoosePlayers( Handle timer )
 		
 		if ( ChoosenPlayer == -1 )
 		{
-			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			}
+			
 			return Plugin_Continue;
 		}
 		
@@ -512,18 +606,25 @@ public Action ChoosePlayers( Handle timer )
 		
 		
 		if ( ChoosensNum == 1 )
-		{	
-			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "NEW_CHOOSEN", name );
+		{
+			if ( GameVersion == Engine_CSGO )
+			{
+				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "NEW_CHOOSEN", name );
+			}
+			else if ( GameVersion == Engine_CSS )
+			{
+				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "NEW_CHOOSEN", name );
+			}
 		}
 		else
 		{
 			if ( i == 0 )
 			{
-				Format( buffer, sizeof( buffer ), "{LIGHTRED}%s", name );
+				Format( buffer, sizeof( buffer ), "{RED}%s", name );
 			}
 			else
 			{
-				Format( buffer, sizeof( buffer ), "%s{LIGHTGREEN}, {LIGHTRED}%s", buffer, name );
+				Format( buffer, sizeof( buffer ), "%s{LIGHTGREEN}, {RED}%s",	 buffer, name );
 			}
 		}
 		
@@ -531,13 +632,21 @@ public Action ChoosePlayers( Handle timer )
 		
 		if ( IsPlayerAlive( ChoosenPlayer ) )
 		{
-			CS_RespawnPlayer( ChoosenPlayer );
+			CS_RespawnPlayer	( ChoosenPlayer										);
+			SetEntProp			( ChoosenPlayer, Prop_Data, "m_takedamage", 0, 1	);
 		}
 	}
 	
 	if ( ChoosensNum != 1 )
 	{
-		CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t%s", "DEATHRUN", "NEW_CHOOSENS", buffer );
+		if ( GameVersion == Engine_CSGO )
+		{
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t%s", "DEATHRUN", "NEW_CHOOSENS", buffer );
+		}
+		else if ( GameVersion == Engine_CSS )
+		{
+			CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t%s", "DEATHRUN", "NEW_CHOOSENS", buffer );
+		}
 	}
 	
 	return Plugin_Continue;
@@ -620,10 +729,14 @@ public void OnGameFrame()
 		{
 			if ( IsClientInGame( i ) )
 			{
-				SetEntProp						( i,	Prop_Data, "m_iFrags",	kills	[ i ] );
-				SetEntProp						( i,	Prop_Data, "m_iDeaths",	deaths	[ i ] );
-				CS_SetClientAssists				( i,							assists [ i ] );
-				CS_SetClientContributionScore	( i,							score   [ i ] );
+				SetEntProp							( i,	Prop_Data, "m_iFrags",	kills	[ i ] );
+				SetEntProp							( i,	Prop_Data, "m_iDeaths",	deaths	[ i ] );
+				
+				if ( GameVersion == Engine_CSGO )
+				{
+					CS_SetClientAssists				( i,							assists [ i ] );
+					CS_SetClientContributionScore	( i,							score   [ i ] );
+				}
 			}
 		}
 	}
