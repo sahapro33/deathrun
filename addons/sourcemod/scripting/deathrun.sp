@@ -225,11 +225,11 @@ public Action respawn_Timer( Handle timer )
 		{
 			if ( GameVersion == Engine_CSGO )
 			{
-				CGOPrintHintTextToAll( "  {{#00FFFF=%t}}\n  %t", "AUTORESPAWN", "AUTORESPAWN_TIME_LEFT", respawn_Seconds );
+				CGOPrintHintTextToAll	(	"  {{#00FFFF==%t}}\n  %t",	"AUTORESPAWN", "AUTORESPAWN_TIME_LEFT",	respawn_Seconds );
 			}
 			else if ( GameVersion == Engine_CSS )
 			{
-				PrintHintTextToAll( "%t: %t", "AUTORESPAWN", "AUTORESPAWN_TIME_LEFT",	respawn_Seconds );
+				PrintHintTextToAll		(	"%t: %t",					"AUTORESPAWN", "AUTORESPAWN_TIME_LEFT",	respawn_Seconds );
 			}
 		}
 		
