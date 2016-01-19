@@ -1,0 +1,57 @@
+"Phrases"
+{
+	"DEATHRUN"
+	{
+		"ru"		"Бег на выживание"
+	}
+	
+	"RANDOMIZING_CHOOSEN"
+	{
+		"ru"		"Выбор избранного игрока..."
+	}
+	
+	"RANDOMIZING_CHOOSENS"
+	{
+		"ru"		"Выбор избранных игроков..."
+	}
+	
+	"MIXING_PLAYERS"
+	{
+		"ru"		"Перемешивание игроков..."
+	}
+	
+	"NEW_CHOOSEN"
+	{
+		"ru"		"Игрок {LIGHTRED}{1} {LIGHTGREEN}был избран!"
+	}
+	
+	"NEW_CHOOSENS"
+	{
+		"ru"		"Избранные игроки: "
+	}
+	
+	"CANT_JOIN_CHOOSENS_TEAM"
+	{
+		"ru"		"Избранных игроков выбирает сервер!"
+	}
+	
+	"CANT_JOIN_ANOTHER"
+	{
+		"ru"		"Вы не можете выйти из команды!"
+	}
+	
+	"CHOOSENS_CANT_SUICIDE"
+	{
+		"ru"		"Самоубийство запрещено!"
+	}
+	
+	"AUTORESPAWN_TIME_LEFT"
+	{
+		"ru"		"  {{#00FFFF==Автоматическое воскрешение}}\n  Осталось {1} секунд..."
+	}
+	
+	"CHOOSEN_DISCONNECTED"
+	{
+		"ru"		"Избранный {LIGHTRED}{1} {LIGHTGREEN} забанен на {2} минут за выход с сервера!"
+	}
+}
