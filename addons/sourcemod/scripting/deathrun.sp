@@ -478,6 +478,13 @@ public Action ChoosePlayers( Handle timer )
 	}
 	
 	int ChoosenPlayer = RandomPlayers();
+	
+	if ( ChoosenPlayer == -1 )
+	{
+		CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+		return Plugin_Continue;
+	}
+	
 	NewChoosens[ ChoosenPlayer ] = true;
 	
 	char name[ 16 ];

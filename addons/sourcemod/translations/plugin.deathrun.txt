@@ -20,6 +20,11 @@
 		"en"		"Mixing players..."
 	}
 	
+	"RANDOMIZING_ERROR"
+	{
+		"en"		"Need more players for choose player..."
+	}
+	
 	"NEW_CHOOSEN"
 	{
 		"#format"	"{1:s}"
