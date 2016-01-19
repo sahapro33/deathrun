@@ -5,11 +5,6 @@
 		"en"		"Deathrun"
 	}
 	
-	"RANDOMIZING_CHOOSEN"
-	{
-		"en"		"Getting choosen player..."
-	}
-	
 	"RANDOMIZING_CHOOSENS"
 	{
 		"en"		"Getting choosen players..."

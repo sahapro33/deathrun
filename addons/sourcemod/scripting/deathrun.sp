@@ -10,7 +10,7 @@
 
 #define PLUGIN_NAME			"Deathrun"
 #define PLUGIN_DESCRIPTION	"Deathrun manager for CS:S and CS:GO"
-#define PLUGIN_VERSION		"2.0.dev2"
+#define PLUGIN_VERSION		"2.0.dev3"
 #define PLUGIN_AUTHOR		"selax"
 #define PLUGIN_URL			"https://github.com/selax/deathrun"
 
@@ -393,15 +393,8 @@ public Action event_RoundEnd( Handle event, const char[] name, bool dontBroadcas
 		}
 		else
 		{
-			if ( GetConVarInt( config_RandomRate ) == 0 )
-			{
-				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSEN" );
-				CreateTimer( 1.0, ChoosePlayers );
-			}
-			else
-			{
-				CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
-			}
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
+			CreateTimer( 1.0, ChoosePlayers );
 		}
 		
 		// round end immortality(after change player team some players can kill)
@@ -477,21 +470,54 @@ public Action ChoosePlayers( Handle timer )
 		}
 	}
 	
-	int ChoosenPlayer = RandomPlayers();
+	int ChoosensNum = 1;
 	
-	if ( ChoosenPlayer == -1 )
+	if ( GetConVarInt( config_RandomRate ) != 0 )
 	{
-		CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
-		return Plugin_Continue;
+		ChoosensNum = view_as<int>(GetTeamClientCount( GetPlayersTeam( ) ) / GetConVarInt( config_RandomRate ));
 	}
 	
-	NewChoosens[ ChoosenPlayer ] = true;
+	char buffer[ 256 ];
 	
-	char name[ 16 ];
-	GetClientName( ChoosenPlayer, name, sizeof ( name ) );
-	CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "NEW_CHOOSEN", name );
+	for (int i = 0; i < ChoosensNum; i++)
+	{
+		int ChoosenPlayer = RandomPlayers();
+		
+		if ( ChoosenPlayer == -1 )
+		{
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
+			return Plugin_Continue;
+		}
+		
+		NewChoosens[ ChoosenPlayer ] = true;
+		
+		char name[ 16 ];
+		GetClientName( ChoosenPlayer, name, sizeof ( name ) );
+		
+		
+		if ( ChoosensNum == 1 )
+		{	
+			CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "NEW_CHOOSEN", name );
+		}
+		else
+		{
+			if ( i == 0 )
+			{
+				Format( buffer, sizeof( buffer ), "{LIGHTRED}%s", name );
+			}
+			else
+			{
+				Format( buffer, sizeof( buffer ), "%s{LIGHTGREEN}, {LIGHTRED}%s", buffer, name );
+			}
+		}
+		
+		CS_SwitchTeam( ChoosenPlayer, NewTeam );
+	}
 	
-	CS_SwitchTeam( ChoosenPlayer, NewTeam );
+	if ( ChoosensNum != 1 )
+	{
+		CGOPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t%s", "DEATHRUN", "NEW_CHOOSENS", buffer );
+	}
 	
 	return Plugin_Continue;
 }
