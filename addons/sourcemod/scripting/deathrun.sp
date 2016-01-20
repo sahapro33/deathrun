@@ -11,7 +11,7 @@
 
 #define PLUGIN_NAME			"Deathrun"
 #define PLUGIN_DESCRIPTION	"Deathrun manager for CS:S and CS:GO"
-#define PLUGIN_VERSION		"2.0.dev6"
+#define PLUGIN_VERSION		"2.0.dev7"
 #define PLUGIN_AUTHOR		"selax"
 #define PLUGIN_URL			"https://github.com/selax/deathrun"
 
@@ -491,6 +491,8 @@ public Action event_RoundEnd( Handle event, const char[] name, bool dontBroadcas
 			{
 				CPrintToChatAll( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "MIXING_PLAYERS" );
 			}
+			
+			CreateTimer( 1.0, MixingPlayers );
 		}
 		else
 		{
@@ -545,6 +547,42 @@ public Action event_RoundEnd( Handle event, const char[] name, bool dontBroadcas
 	return Plugin_Continue;
 }
 
+public Action MixingPlayers( Handle timer )
+{
+	if ( !GetConVarBool( config_Enabled ) )
+	{
+		return Plugin_Continue;
+	}
+	
+	int PlayersInTeam = view_as< int >( GetPlayersCount() / 2 );
+	
+	for ( int i = 1; i <= MaxClients; i++ )
+	{
+		if ( !IsClientInGame( i ) )
+		{
+			continue;
+		}
+		
+		if ( GetClientTeam( i ) < 2 )
+		{
+			continue;
+		}
+		
+		int RandomTeam = GetRandomInt( CS_TEAM_T, CS_TEAM_CT );
+		
+		if ( GetTeamClientCount( RandomTeam )  < PlayersInTeam )
+		{
+			CS_SwitchTeam( i, RandomTeam );
+		}
+		else
+		{
+			CS_SwitchTeam( i, AnotherTeam( RandomTeam ) );
+		}
+	}
+	
+	return Plugin_Continue;
+}
+
 public Action ChoosePlayers( Handle timer )
 {
 	if ( !GetConVarBool( config_Enabled ) )
@@ -576,7 +614,7 @@ public Action ChoosePlayers( Handle timer )
 	
 	if ( GetConVarInt( config_RandomRate ) != 0 )
 	{
-		ChoosensNum = view_as<int>( GetTeamClientCount( OldTeam ) / GetConVarInt( config_RandomRate ) );
+		ChoosensNum = view_as< int >( GetTeamClientCount( OldTeam ) / GetConVarInt( config_RandomRate ) );
 	}
 	
 	char buffer[ 256 ];
@@ -749,7 +787,12 @@ int GetPlayersCount()
 
 int GetPlayersTeam()
 {
-	if ( GetConVarInt( config_RandomPlayers ) == CS_TEAM_T )
+	return AnotherTeam( GetConVarInt( config_RandomPlayers ) );
+}
+
+int AnotherTeam( int team )
+{
+	if ( team == CS_TEAM_T )
 	{
 		return CS_TEAM_CT;
 	}
