@@ -7,7 +7,7 @@
 	
 	"RANDOMIZING_CHOOSENS"
 	{
-		"en"		"Getting choosen players..."
+		"en"		"Choosing player(s)..."
 	}
 	
 	"MIXING_PLAYERS"
@@ -17,19 +17,19 @@
 	
 	"RANDOMIZING_ERROR"
 	{
-		"en"		"Need more players for choose player..."
+		"en"		"Need more players to start a new round..."
 	}
 	
 	"NEW_CHOOSEN"
 	{
 		"#format"	"{1:s}"
-		"en"		"Player {RED}{1} {LIGHTGREEN}is a new choosen!"
+		"en"		"Player {RED}{1} {LIGHTGREEN}has been chosen!"
 	}
 	
 	"REPLACE_CHOOSEN"
 	{
 		"#format"	"{1:s}"
-		"en"		"Player {RED}{1} {LIGHTGREEN}replaced choosen!"
+		"en"		"Player {RED}{1} {LIGHTGREEN}replaced the previously chosen!"
 	}
 	
 	"NEW_CHOOSENS"
@@ -39,7 +39,7 @@
 	
 	"CANT_JOIN_CHOOSENS_TEAM"
 	{
-		"en"		"You can't join choosens team"
+		"en"		"You can't join this team"
 	}
 	
 	"CANT_JOIN_ANOTHER"
@@ -66,6 +66,6 @@
 	"CHOOSEN_DISCONNECTED"
 	{
 		"#format"	"{1:s},{2:i}"
-		"en"		"Choosen {LIGHTRED}{1} {LIGHTGREEN} disconnected, he banned for {2} minutes!"
+		"en"		"Chosen {LIGHTRED}{1} {LIGHTGREEN} disconnected, the player have been banned for {2} minutes!"
 	}
 }

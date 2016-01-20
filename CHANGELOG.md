@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.0.dev8
+- Changed code structure
+- Fixed en lang
+- Fixed 2 errors
+- If player suicide - all see choosen killed them and all choosens get +kill.
+- WinPoints now can work without SaveScores and work correctly with CS:S (in CS:GO winpoint - score, in CS:S - kills)
+
 ## 2.0.dev7
 - Mixing players (dr_random 1) now work!
 
