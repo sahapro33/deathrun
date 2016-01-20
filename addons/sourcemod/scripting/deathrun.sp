@@ -44,7 +44,7 @@ bool	NewChoosens	[ MAXPLAYERS + 1 ];
 
 int		kills		[ MAXPLAYERS + 1 ];
 int		deaths		[ MAXPLAYERS + 1 ];
-int		assists		[ MAXPLAYERS + 1 ];
+//int	assists		[ MAXPLAYERS + 1 ];
 int		score		[ MAXPLAYERS + 1 ];
 
 bool	respawn_Active	= false;
@@ -79,7 +79,7 @@ public void OnPluginStart()
 	RegConsoleCmd(	"explode",				command_Suicide		);
 	RegConsoleCmd(	"spectate",				command_Spectate	);
 	
-	HookEvent(		"player_death",			event_PlayerDeath							);
+	HookEvent(		"player_death",			event_PlayerDeath, 		EventHookMode_Pre	);
 	HookEvent(		"player_disconnect",	event_PlayerDisconnect, EventHookMode_Pre	);
 	HookEvent(		"player_connect",		event_PlayerConnect, 	EventHookMode_Pre	);
 	HookEvent(		"player_team",			event_PlayerTeam,		EventHookMode_Pre	);
@@ -467,7 +467,7 @@ void ResetPlayerScoreCounters( int client )
 {
 	kills	[ client ] = 0 ;
 	deaths	[ client ] = 0 ;
-	assists	[ client ] = 0 ;
+//	assists	[ client ] = 0 ;
 	score	[ client ] = 0 ;
 }
 
@@ -532,12 +532,12 @@ public Action event_RoundEnd( Handle event, const char[] name, bool dontBroadcas
 				
 				if ( ( team == CS_TEAM_T  ) && ( reason == ROUNDEND_TERRORISTS_WIN	) )
 				{
-					assists [ i ] ++ ;
+//					assists [ i ] ++ ;
 					score	[ i ] ++ ;
 				}
 				else if ( ( team == CS_TEAM_CT ) && ( reason == ROUNDEND_CTS_WIN	) )
 				{
-					assists [ i ] ++ ;
+//					assists [ i ] ++ ;
 					score	[ i ] ++ ;
 				}
 			}
@@ -723,25 +723,45 @@ int RandomPlayers()
 	return PlayerList[ GetRandomInt( 0, PlayerCount - 1 ) ];
 }
 
-public Action event_PlayerDeath( Handle event, const char[] name, bool dontBroadcast )
+public Action event_PlayerDeath( Event event, const char[] name, bool dontBroadcast )
 {
 	if ( !GetConVarBool( config_Enabled ) )
 	{
 		return Plugin_Continue;
 	}
 	
-	int victim		= GetClientOfUserId( GetEventInt( event, "userid"	) );
-	int attacker	= GetClientOfUserId( GetEventInt( event, "attacker"	) );
+	int victim			= GetClientOfUserId	( GetEventInt( event, "userid"		)	);
+	int attacker		= GetClientOfUserId	( GetEventInt( event, "attacker"	)	);
+	
+	int RandomConfig	= GetConVarInt		( config_RandomPlayers					);
 	
 	if ( GetConVarBool( config_Scores ) )
 	{
-		if ( ( victim != attacker ) && ( victim != 0 ) && ( attacker != 0 ) )
+		if ( ( victim != attacker ) && ( victim != 0 )  )
 		{
-			kills  [ attacker ] ++ ;
-			score  [ attacker ] ++ ;
-			deaths [ victim   ] ++ ;
+			kills	[ attacker ] ++ ;
+			score	[ attacker ] ++ ;
 		}
+		
+		if ( ( attacker == 0 ) && ( GetClientTeam( victim ) != RandomConfig ) && ( RandomConfig > 1 ) )
+		{
+			for ( int i = 1; i <= MaxClients; i++ )
+			{
+				if ( !IsClientInGame( i ) )
+				{
+					continue;
+				}
+				
+				if ( GetClientTeam( i ) == RandomConfig )
+				{
+					kills[ i ] ++ ;
+				}
+			}
+		}
+		
+		deaths		[ victim   ] ++ ;
 	}
+	
 	
 	if ( GetConVarInt( config_AutoRespawn ) != 0 )
 	{
@@ -751,7 +771,31 @@ public Action event_PlayerDeath( Handle event, const char[] name, bool dontBroad
 		}
 	}
 	
+	if ( RandomConfig > 1 )
+	{
+		event.SetInt	( "attacker",	GetClientUserId( GetChoosenID( ) )	);
+		event.SetString	( "weapon",		"inferno"							);
+	}
+	
 	return Plugin_Continue;
+}
+
+int GetChoosenID( )
+{
+	for ( int i = 1; i <= MaxClients; i++ )
+	{
+		if ( !IsClientInGame( i ) )
+		{
+			continue;
+		}
+		
+		if ( GetClientTeam( i ) == GetConVarInt( config_RandomPlayers ) )
+		{
+			return i;
+		}
+	}
+	
+	return 0;
 }
 
 public void OnGameFrame()
@@ -772,7 +816,7 @@ public void OnGameFrame()
 				
 				if ( GameVersion == Engine_CSGO )
 				{
-					CS_SetClientAssists				( i,							assists [ i ] );
+//					CS_SetClientAssists				( i,							assists [ i ] );
 					CS_SetClientContributionScore	( i,							score   [ i ] );
 				}
 			}
