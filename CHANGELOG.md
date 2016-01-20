@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.dev7
+- Mixing players (dr_random 1) now work!
+
 ## 2.0.dev6
 - Support for Counter-Strike Source
 
