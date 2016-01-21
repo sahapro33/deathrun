@@ -8,6 +8,11 @@ void PlayerDisconnect_Bans ( Event ev )
 {
 	int client = GetClientOfUserId ( ev.GetInt ( "userid" ) );
 	
+	if ( client == 0 )
+	{
+		return;
+	}
+	
 	if ( IsClientInGame ( client ) )
 	{
 		if ( ( GetClientTeam ( client ) == config_RandomPlayers.IntValue ) && ( config_RandomPlayers.IntValue > 1 ) )

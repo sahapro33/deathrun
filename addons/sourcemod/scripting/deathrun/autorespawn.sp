@@ -40,10 +40,7 @@ void PlayerDeath_AutoRespawn ( Event ev )
 void RoundEnd_AutoRespawn ( )
 {
 	// if round ended less then timer - destroy them
-	if ( autorespawn_TimerHandle != INVALID_HANDLE )
-	{
-		KillTimer ( autorespawn_TimerHandle );
-	}
+	autorespawn_Active = false;
 }
 
 public Action respawn_Timer ( Handle timer )
