@@ -5,7 +5,7 @@ void PluginStart_WinPoints ( )
 
 void RoundEnd_WinPoints ( Event ev )
 {
-	if ( config_WinPoint.IntValue )
+	if ( !config_WinPoint.IntValue )
 	{
 		return;
 	}
