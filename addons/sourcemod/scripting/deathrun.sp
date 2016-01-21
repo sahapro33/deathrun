@@ -39,6 +39,7 @@ ConVar	config_MinPlayers;
 ConVar	config_RandomPlayers;
 ConVar	config_RandomRate;
 ConVar	config_Scores;
+ConVar	config_KillForSuicide;
 ConVar	config_AntiSuicide;
 
 bool	OldChoosens	[ MAXPLAYERS + 1 ];

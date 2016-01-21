@@ -1,6 +1,7 @@
 void PluginStart_Scores ( )
 {
-	config_Scores = CreateConVar ( "dr_scores", "1", "Enable the scores manager?", FCVAR_NONE, true, 0.0, true, 1.0 );
+	config_Scores			= CreateConVar ( "dr_scores",			"1", "Enable the scores manager?",				FCVAR_NONE, true, 0.0, true, 1.0 );
+	config_KillForSuicide	= CreateConVar ( "dr_killforsuicide",	"0", "dd kill for choosen when CT suicide?",	FCVAR_NONE, true, 0.0, true, 1.0 );
 	
 	RegConsoleCmd ( "sm_rs",			command_ResetScore	);
 	RegConsoleCmd ( "sm_resetscore",	command_ResetScore	);
@@ -44,7 +45,7 @@ void PlayerDeath_SaveScores ( Event ev )
 		score	[ attacker ] ++ ;
 	}
 	
-	if ( ( attacker == 0 ) && ( GetClientTeam ( client ) != config_RandomPlayers.IntValue ) && ( config_RandomPlayers.IntValue > 1 ) )
+	if ( ( attacker == 0 ) && ( GetClientTeam ( client ) != config_RandomPlayers.IntValue ) && ( config_RandomPlayers.IntValue > 1 ) && config_KillForSuicide.BoolValue )
 	{
 		for ( int i = 1; i <= MaxClients; i++ )
 		{
