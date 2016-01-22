@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.0.dev9
+- Fix for AutoRespawn timer.
+- Fix error when player disconnected and clientid is 0.
+- Fix for not worked WinPoints.
+- Fix for choosen immortality.
+- Fix for players on choosen spawn in first round.
+- Fix for not worked "self-destroyer showing as choosen kill self-destroyer".
+- Add cvar for disable adding kills to choosen for suicide players.
+
 ## 2.0.dev8
 - Changed code structure
 - Fixed en lang

@@ -1,9 +1,53 @@
+int RoundCounter = 0;
+
 void PluginStart_Random ( )
 {
 	config_RandomPlayers	= CreateConVar ( "dr_random",		"2", "Type of player randomizing, or disable this feature",	FCVAR_NONE, true, 0.0, true, 3.0	);
 	config_RandomRate		= CreateConVar ( "dr_random_rate",	"0", "How many players for one choosen player",				FCVAR_NONE, true, 0.0, true, 64.0	);
 	
 	RegConsoleCmd ( "jointeam", command_JoinTeam );
+}
+
+void OnMapStart_Random ( )
+{
+	RoundCounter = 0;
+}
+
+void RoundStart_Random ( )
+{
+	if ( config_RandomPlayers.IntValue < 2 )
+	{
+		return;
+	}
+	
+	if ( RoundCounter == 0 )
+	{
+		CreateTimer ( 1.5, FixForFirstRound );
+	}
+	
+	RoundCounter++;
+}
+
+// Fix for players on choosens spawn
+// Fix for choosen immortality
+public Action FixForFirstRound ( Handle timer )
+{
+	if ( !config_Enabled.BoolValue )
+	{
+		return Plugin_Continue;
+	}
+	
+	for ( int i = 1; i <= MaxClients; i++ )
+	{
+		if ( !IsClientInGame ( i ) || !IsPlayerAlive ( i ) )
+		{
+			continue;
+		}
+		
+		CS_RespawnPlayer ( i );
+	}
+	
+	return Plugin_Continue;
 }
 
 public Action command_JoinTeam( int client, int args )
@@ -228,6 +272,7 @@ int GetChoosenID ( )
 	
 	return 0;
 }
+
 public Action MixingPlayers ( Handle timer )
 {
 	if ( !config_Enabled.BoolValue )

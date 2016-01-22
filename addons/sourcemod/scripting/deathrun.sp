@@ -79,6 +79,16 @@ public void OnPluginStart ( )
 	PluginStart_WinPoints	( );
 }
 
+public void OnMapStart ( )
+{
+	if ( !config_Enabled.BoolValue )
+	{
+		return;
+	}
+	
+	OnMapStart_Random ( );
+}
+
 public void OnClientPutInServer ( int client )
 {
 	SDKHook( client, SDKHook_WeaponCanUse,	OnWeaponCanUse	);

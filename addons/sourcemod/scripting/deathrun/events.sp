@@ -35,7 +35,8 @@ public Action event_RoundStart ( Event ev, const char[] name, bool dontBroadcast
 		return Plugin_Continue;
 	}
 	
-	RoundStart_AutoRespawn ( );
+	RoundStart_AutoRespawn	( );
+	RoundStart_Random		( );
 	
 	return Plugin_Continue;
 }
@@ -80,7 +81,7 @@ public Action event_PlayerDeath( Event ev, const char[] name, bool dontBroadcast
 	int client = GetClientOfUserId ( ev.GetInt ( "userid" ) );
 	int attacker = GetClientOfUserId ( ev.GetInt ( "attacker" ) );
 	
-	if ( ( config_RandomPlayers.IntValue > 1 ) && ( attacker > 0 ) && ( GetClientTeam ( client ) == CS_TEAM_CT ) )
+	if ( ( config_RandomPlayers.IntValue > 1 ) && ( attacker == 0 ) && ( GetClientTeam ( client ) == GetPlayersTeam ( ) ) )
 	{
 		int choosen = GetChoosenID ( );
 		
@@ -90,7 +91,7 @@ public Action event_PlayerDeath( Event ev, const char[] name, bool dontBroadcast
 		}
 		else
 		{
-			ev.SetInt ( "attacker",	GetClientUserId ( GetChoosenID( ) )	);
+			ev.SetInt ( "attacker",	GetClientUserId ( choosen )	);
 		}
 		
 		ev.SetString ( "weapon", "inferno" );
