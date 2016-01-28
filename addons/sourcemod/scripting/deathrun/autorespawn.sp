@@ -80,5 +80,8 @@ public Action respawn_Timer ( Handle timer )
 
 public Action respawn_SpawnTimer ( Handle timer, int client )
 {
-	CS_RespawnPlayer ( client );
+	if ( IsClientInGame( client ) )
+	{
+		CS_RespawnPlayer ( client );
+	}
 }

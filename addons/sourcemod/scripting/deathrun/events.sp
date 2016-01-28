@@ -1,14 +1,14 @@
 void PluginStart_Events( )
 {
-	HookEvent( "player_death",		event_PlayerDeath, 		EventHookMode_Pre	);
-	HookEvent( "player_disconnect",	event_PlayerDisconnect, EventHookMode_Pre	);
-	HookEvent( "player_connect",	event_PlayerConnect, 	EventHookMode_Pre	);
-	HookEvent( "player_team",		event_PlayerTeam,		EventHookMode_Pre	);
-	HookEvent( "round_end",			event_RoundEnd								);
-	HookEvent( "round_start",		event_RoundStart							);
+	HookEvent( "player_death",		PlayerDeath, 		EventHookMode_Pre	);
+	HookEvent( "player_disconnect",	PlayerDisconnect,	EventHookMode_Pre	);
+	HookEvent( "player_connect",	PlayerConnect, 		EventHookMode_Pre	);
+	HookEvent( "player_team",		PlayerTeam,			EventHookMode_Pre	);
+	HookEvent( "round_end",			RoundEnd								);
+	HookEvent( "round_start",		RoundStart								);
 }
 
-public Action event_PlayerTeam ( Event ev, const char[] name, bool dontBroadcast )
+public Action PlayerTeam		( Event ev, const char[] name, bool dontBroadcast )
 {
 	if ( !config_Enabled.BoolValue )
 	{
@@ -18,7 +18,7 @@ public Action event_PlayerTeam ( Event ev, const char[] name, bool dontBroadcast
 	return Plugin_Handled;
 }
 
-public Action event_PlayerConnect ( Event ev, const char[] name, bool dontBroadcast )
+public Action PlayerConnect		( Event ev, const char[] name, bool dontBroadcast )
 {
 	if ( !config_Enabled.BoolValue )
 	{
@@ -28,7 +28,7 @@ public Action event_PlayerConnect ( Event ev, const char[] name, bool dontBroadc
 	return Plugin_Handled;
 }
 
-public Action event_RoundStart ( Event ev, const char[] name, bool dontBroadcast )
+public Action RoundStart		( Event ev, const char[] name, bool dontBroadcast )
 {
 	if ( !config_Enabled.BoolValue )
 	{
@@ -41,7 +41,7 @@ public Action event_RoundStart ( Event ev, const char[] name, bool dontBroadcast
 	return Plugin_Continue;
 }
 
-public Action event_PlayerDisconnect ( Event ev, const char[] name, bool dontBroadcast )
+public Action PlayerDisconnect	( Event ev, const char[] name, bool dontBroadcast )
 {
 	if ( !config_Enabled.BoolValue )
 	{
@@ -54,7 +54,7 @@ public Action event_PlayerDisconnect ( Event ev, const char[] name, bool dontBro
 	return Plugin_Handled;
 }
 
-public Action event_RoundEnd ( Event ev, const char[] name, bool dontBroadcast )
+public Action RoundEnd 			( Event ev, const char[] name, bool dontBroadcast )
 {
 	if ( !config_Enabled.BoolValue )
 	{
@@ -68,7 +68,7 @@ public Action event_RoundEnd ( Event ev, const char[] name, bool dontBroadcast )
 	return Plugin_Continue;
 }
 
-public Action event_PlayerDeath( Event ev, const char[] name, bool dontBroadcast )
+public Action PlayerDeath		( Event ev, const char[] name, bool dontBroadcast )
 {
 	if ( !config_Enabled.BoolValue )
 	{

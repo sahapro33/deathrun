@@ -214,7 +214,7 @@ void PlayerDisconnect_Random ( Event ev )
 	{
 		int client = GetClientOfUserId ( ev.GetInt ( "userid" ) );
 		
-		if ( !IsClientInGame( client ) || GetClientTeam ( client ) == config_RandomPlayers.IntValue )
+		if ( !client || !IsClientInGame( client ) || GetClientTeam ( client ) == config_RandomPlayers.IntValue )
 		{
 			if ( GetTeamClientCount ( config_RandomPlayers.IntValue ) <= 1 )
 			{
