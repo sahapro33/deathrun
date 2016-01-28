@@ -5,6 +5,16 @@
 		"en"		"Deathrun"
 	}
 	
+	"PLAYER"
+	{
+		"en"		"Player"
+	}
+	
+	"CHOOSEN"
+	{
+		"en"		"Choosen"
+	}
+	
 	"RANDOMIZING_CHOOSENS"
 	{
 		"en"		"Choosing player(s)..."
@@ -20,16 +30,14 @@
 		"en"		"Need more players to start a new round..."
 	}
 	
-	"NEW_CHOOSEN"
+	"HAS_BEEN_CHOOSEN"
 	{
-		"#format"	"{1:s}"
-		"en"		"Player {RED}{1} {LIGHTGREEN}has been chosen!"
+		"en"		"has been chosen!"
 	}
 	
 	"REPLACE_CHOOSEN"
 	{
-		"#format"	"{1:s}"
-		"en"		"Player {RED}{1} {LIGHTGREEN}replaced the previously chosen!"
+		"en"		"replaced the previously chosen!"
 	}
 	
 	"NEW_CHOOSENS"
@@ -65,7 +73,7 @@
 	
 	"CHOOSEN_DISCONNECTED"
 	{
-		"#format"	"{1:s},{2:i}"
-		"en"		"Chosen {LIGHTRED}{1} {LIGHTGREEN} disconnected, the player have been banned for {2} minutes!"
+		"#format"	"{1:i}"
+		"en"		"disconnected, the player have been banned for {1} minutes!"
 	}
 }

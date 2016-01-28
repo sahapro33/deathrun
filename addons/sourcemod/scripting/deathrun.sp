@@ -49,6 +49,7 @@ int		kills		[ MAXPLAYERS + 1 ];
 int		deaths		[ MAXPLAYERS + 1 ];
 int		score		[ MAXPLAYERS + 1 ];
 
+#include "deathrun/messages.sp"
 #include "deathrun/random.sp"
 #include "deathrun/antisuicide.sp"
 #include "deathrun/autorespawn.sp"

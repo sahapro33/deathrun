@@ -30,7 +30,7 @@ void PlayerDeath_AutoRespawn ( Event ev )
 	int client = GetClientOfUserId ( ev.GetInt ( "userid" ) );
 	
 	// check player is not choosen and timer active
-	if ( autorespawn_Active && GetClientTeam ( client ) == GetPlayersTeam ( ) )
+	if ( autorespawn_Active && ( GetClientTeam ( client ) == GetPlayersTeam ( ) ) )
 	{
 		// respawn with delay in 1 second
 		CreateTimer ( 1.0, respawn_SpawnTimer, client );

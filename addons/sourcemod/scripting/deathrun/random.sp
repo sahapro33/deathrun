@@ -92,14 +92,7 @@ public Action command_JoinTeam( int client, int args )
 		}
 		else if ( CurrentTeam != PlayersTeam )
 		{
-			if ( GameVersion == Engine_CSGO )
-			{
-				CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_CHOOSENS_TEAM" );
-			}
-			else if ( GameVersion == Engine_CSS )
-			{
-				CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_CHOOSENS_TEAM" );
-			}
+			DRPrintToChat ( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_CHOOSENS_TEAM" );
 			
 			if ( CurrentTeam != ChoosensTeam )
 			{
@@ -118,14 +111,7 @@ public Action command_JoinTeam( int client, int args )
 		{
 			if ( config_AntiSuicide.BoolValue )
 			{
-				if ( GameVersion == Engine_CSGO )
-				{
-					CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
-				}
-				else if ( GameVersion == Engine_CSS )
-				{
-					CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
-				}
+				DRPrintToChat ( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
 			}
 			else
 			{
@@ -143,14 +129,7 @@ public Action command_JoinTeam( int client, int args )
 		{
 			if ( config_AntiSuicide.BoolValue )
 			{
-				if ( GameVersion == Engine_CSGO )
-				{
-					CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
-				}
-				else if ( GameVersion == Engine_CSS )
-				{
-					CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
-				}
+				DRPrintToChat ( client, "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CANT_JOIN_ANOTHER" );
 			}
 			else
 			{
@@ -171,27 +150,13 @@ void RoundEnd_Random ( )
 	
 	if ( config_RandomPlayers.IntValue == 1 )
 	{
-		if ( GameVersion == Engine_CSGO )
-		{
-			CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "MIXING_PLAYERS" );
-		}
-		else if ( GameVersion == Engine_CSS )
-		{
-			CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "MIXING_PLAYERS" );
-		}
+		DRPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "MIXING_PLAYERS" );
 		
 		CreateTimer ( 1.0, MixingPlayers );
 	}
 	else
 	{
-		if ( GameVersion == Engine_CSGO )
-		{
-			CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
-		}
-		else if ( GameVersion == Engine_CSS )
-		{
-			CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
-		}
+		DRPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_CHOOSENS" );
 		
 		CreateTimer ( 1.0, ChoosePlayers );
 	}
@@ -222,14 +187,7 @@ void PlayerDisconnect_Random ( Event ev )
 				
 				if ( ChoosenPlayer == -1 )
 				{
-					if ( GameVersion == Engine_CSGO )
-					{
-						CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
-					}
-					else if ( GameVersion == Engine_CSS )
-					{
-						CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
-					}
+					DRPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "RANDOMIZING_ERROR" );
 					
 					return;
 				}
@@ -239,14 +197,7 @@ void PlayerDisconnect_Random ( Event ev )
 				char name [ 16 ];
 				GetClientName ( ChoosenPlayer, name, sizeof ( name ) );
 				
-				if ( GameVersion == Engine_CSGO )
-				{
-					CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "REPLACE_CHOOSEN", name );
-				}
-				else if ( GameVersion == Engine_CSS )
-				{
-					CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "REPLACE_CHOOSEN", name );
-				}
+				DRPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t {RED}%s {LIGHTGREEN}%t", "DEATHRUN", "PLAYER", name, "REPLACE_CHOOSEN" );
 				
 				CS_SwitchTeam		( ChoosenPlayer, config_RandomPlayers.IntValue	);
 				CS_RespawnPlayer	( ChoosenPlayer				);
@@ -371,14 +322,7 @@ public Action ChoosePlayers ( Handle timer )
 		
 		if ( ChoosensNum == 1 )
 		{
-			if ( GameVersion == Engine_CSGO )
-			{
-				CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "NEW_CHOOSEN", name );
-			}
-			else if ( GameVersion == Engine_CSS )
-			{
-				CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "NEW_CHOOSEN", name );
-			}
+			DRPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t {RED}%s {LIGHTGREEN}%t", "DEATHRUN", "PLAYER", name, "HAS_BEEN_CHOOSEN" );
 		}
 		else
 		{

@@ -39,14 +39,7 @@ void PlayerDisconnect_Bans ( Event ev )
 						// need changes
 						BanClient ( client, config_AutoBan.IntValue, BANFLAG_AUTHID, "Disconnected choosen", "Disconnected choosen" );
 						
-						if ( GameVersion == Engine_CSGO )
-						{
-							CGOPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN_DISCONNECTED", cname, config_AutoBan.IntValue );
-						}
-						else if ( GameVersion == Engine_CSS )
-						{
-							CPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN_DISCONNECTED", cname, config_AutoBan.IntValue );
-						}
+						DRPrintToChatAll ( "{GREEN}%t {OLIVE}> {LIGHTGREEN}%t {RED}%s {LIGHTGREEN}%t", "DEATHRUN", "CHOOSEN", cname, "CHOOSEN_DISCONNECTED", config_AutoBan.IntValue );
 					}
 				}
 			}
