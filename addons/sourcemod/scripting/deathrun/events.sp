@@ -1,11 +1,11 @@
 void PluginStart_Events( )
 {
-	HookEvent( "player_death",		PlayerDeath, 		EventHookMode_Pre	);
-	HookEvent( "player_disconnect",	PlayerDisconnect,	EventHookMode_Pre	);
-	HookEvent( "player_connect",	PlayerConnect, 		EventHookMode_Pre	);
-	HookEvent( "player_team",		PlayerTeam,			EventHookMode_Pre	);
-	HookEvent( "round_end",			RoundEnd								);
-	HookEvent( "round_start",		RoundStart								);
+	HookEvent( "player_death",		PlayerDeath, 		EventHookMode_Pre			);
+	HookEvent( "player_disconnect",	PlayerDisconnect,	EventHookMode_Pre			);
+	HookEvent( "player_connect",	PlayerConnect, 		EventHookMode_Pre			);
+	HookEvent( "player_team",		PlayerTeam,			EventHookMode_Pre			);
+	HookEvent( "round_end",			RoundEnd,			EventHookMode_PostNoCopy	);
+	HookEvent( "round_start",		RoundStart,			EventHookMode_PostNoCopy	);
 }
 
 public Action PlayerTeam		( Event ev, const char[] name, bool dontBroadcast )
