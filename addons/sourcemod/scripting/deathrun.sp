@@ -11,7 +11,7 @@
 
 #define PLUGIN_NAME			"Deathrun"
 #define PLUGIN_DESCRIPTION	"Deathrun manager for CS:S and CS:GO"
-#define PLUGIN_VERSION		"2.0.dev9"
+#define PLUGIN_VERSION		"2.0.dev10"
 #define PLUGIN_AUTHOR		"selax"
 #define PLUGIN_URL			"https://github.com/selax/deathrun"
 
