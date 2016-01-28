@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.0.dev10
+- Little fix in respawn timer
+- Little fix for disconenct players (remove error in logs, but not fix problem)
+- Change event names
+- Little config change
+- round_start and round_end now EventHookMode_PostNoCopy
+- Make code more clear (add DRPrintToChat and DRPrintToChatAll)
+- Fix for bug when client messages printed for all players
+
 ## 2.0.dev9
 - Fix for AutoRespawn timer.
 - Fix error when player disconnected and clientid is 0.
